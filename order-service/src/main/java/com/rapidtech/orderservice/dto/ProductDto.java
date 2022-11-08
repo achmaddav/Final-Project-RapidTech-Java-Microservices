@@ -1,4 +1,4 @@
-package com.rapidtech.walletservice.dto;
+package com.rapidtech.orderservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WalletResponse {
-    private String userName;
-    private double saldo;
+public class ProductDto {
+    private String productName;
+    private Integer quantity;
 }

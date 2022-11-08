@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WalletResponse {
     private String userName;
-    private boolean isInActive;
+    private double saldo;
 }

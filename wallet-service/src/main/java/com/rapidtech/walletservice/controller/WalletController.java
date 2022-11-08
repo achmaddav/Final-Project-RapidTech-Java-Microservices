@@ -44,4 +44,9 @@ public class WalletController {
         walletService.topUp(walletRequest);
         return "TopUp is succeed";
     }
+
+    @PostMapping("/decrease")
+    public void decrease(@RequestBody WalletRequest walletRequest) {
+        walletService.decreaseSaldo(walletRequest);
+    }
 }

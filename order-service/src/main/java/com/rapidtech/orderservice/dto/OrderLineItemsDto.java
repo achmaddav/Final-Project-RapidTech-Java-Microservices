@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderLineItemsDto {
-    private String userName;
     private String productName;
     private Integer quantity;
 }

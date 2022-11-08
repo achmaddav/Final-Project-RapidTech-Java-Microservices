@@ -11,4 +11,5 @@ public interface WalletService {
     WalletRequest cekSaldo(String userName);
     void createtWallet(WalletRequest walletRequest);
     void topUp(WalletRequest walletRequest);
+    void decreaseSaldo(WalletRequest walletRequest);
 }

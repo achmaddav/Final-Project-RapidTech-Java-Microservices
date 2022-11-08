@@ -2,10 +2,12 @@ package com.rapidtech.walletservice.service.impl;
 
 import com.rapidtech.walletservice.dto.WalletRequest;
 import com.rapidtech.walletservice.dto.WalletResponse;
+import com.rapidtech.walletservice.event.OrderPlacedEvent;
 import com.rapidtech.walletservice.model.Wallet;
 import com.rapidtech.walletservice.repository.WalletRepository;
 import com.rapidtech.walletservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -19,13 +21,14 @@ import java.util.Optional;
 public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
     @Override
     public List<WalletResponse> isInActive(List<String> userName) {
         return walletRepository.findByUserNameIn(userName).stream()
                 .map(wallet ->
                         WalletResponse.builder()
                                 .userName(wallet.getUserName())
-                                .isInActive(wallet.getSaldo()>0)
+                                .saldo(wallet.getSaldo())
                                 .build()).toList();
     }
 
@@ -65,6 +68,19 @@ public class WalletServiceImpl implements WalletService {
         if (wallet != null) {
             wallet.setSaldo(wallet.getSaldo() + walletRequest.getSaldo());
             walletRepository.save(wallet);
+        } else {
+            throw new RuntimeException("Username tidak cocok atau belum ada");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void decreaseSaldo(WalletRequest walletRequest) {
+        Wallet wallet = walletRepository.findByUserName(walletRequest.getUserName());
+        if (wallet != null) {
+            wallet.setSaldo(wallet.getSaldo() - walletRequest.getSaldo());
+            walletRepository.save(wallet);
+            kafkaTemplate.send("notificationTopic",new OrderPlacedEvent("Wallet account: "+wallet.getUserName()+" sisa saldo: Rp. "+wallet.getSaldo()));
         } else {
             throw new RuntimeException("Username tidak cocok atau belum ada");
         }

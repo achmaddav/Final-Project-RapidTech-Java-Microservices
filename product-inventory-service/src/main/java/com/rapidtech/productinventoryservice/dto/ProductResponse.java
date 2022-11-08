@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductResponse {
     private String productName;
-    private boolean isInStcok;
+    private double price;
+    private Integer quantity;
 }

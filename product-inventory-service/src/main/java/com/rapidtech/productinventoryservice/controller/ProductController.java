@@ -34,4 +34,22 @@ public class ProductController {
         productService.insertProduct(productRequest);
         return "Data product added";
     }
+
+    @GetMapping("/cekstock")
+    public ProductRequest cekstock(@RequestParam String productName){
+
+        return productService.cekStock(productName);
+    }
+
+
+    @PostMapping("/increase")
+    public String increase(@RequestBody ProductRequest productRequest) {
+        productService.increaseStock(productRequest);
+        return "Stock product is added";
+    }
+
+    @PostMapping("/decrease")
+    public void decrease(@RequestBody ProductRequest productRequest) {
+        productService.decreaseStock(productRequest);
+    }
 }
