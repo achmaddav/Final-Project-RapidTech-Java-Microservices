@@ -23,12 +23,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
-    @SneakyThrows
+
     @Override
     public List<ProductResponse> isInStock(List<String> productName) {
-        log.info("Mulai menunggu");
+        //log.info("Mulai menunggu");
         //Thread.sleep(10000);
-        log.info("Selesai menunggu");
+        //log.info("Selesai menunggu");
         return productRepository.findByProductNameIn(productName).stream()
                 .map(product ->
                     ProductResponse.builder()
@@ -52,8 +52,12 @@ public class ProductServiceImpl implements ProductService {
         return productRequestList;
     }
 
+    @SneakyThrows
     @Override
     public ProductRequest cekStock(String productName) {
+        log.info("Mulai menunggu");
+        Thread.sleep(10000);
+        log.info("Selesai menunggu");
         Product product = productRepository.findByProductName(productName);
         return ProductRequest.builder()
                 .productName((product.getProductName()))
@@ -71,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
     @Override
     public void increaseStock(ProductRequest productRequest) {
         Product product = productRepository.findByProductName(productRequest.getProductName());

@@ -41,8 +41,7 @@ public class ProductController {
         return productService.cekStock(productName);
     }
 
-
-    @PostMapping("/increase")
+    @PostMapping("/addstock")
     public String increase(@RequestBody ProductRequest productRequest) {
         productService.increaseStock(productRequest);
         return "Stock product is added";
